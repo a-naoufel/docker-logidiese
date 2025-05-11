@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./apache-php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./apache-php:/var/www/html
+    depends_on:
+      - mysql
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: logidiese
+      MYSQL_USER: serveur
+      MYSQL_PASSWORD: Diesetel92
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db_dump.sql:/docker-entrypoint-initdb.d/db_dump.sql:ro
+
+volumes:
+  mysql-data:
